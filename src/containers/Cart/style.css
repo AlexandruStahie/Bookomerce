@@ -1,0 +1,10 @@
+.cart {
+  padding-left: 6.5rem;
+  padding-right: 8rem;
+}
+
+.remove-btn {
+  padding: 5px 10px;
+  color: white;
+  background-color: red;
+}
