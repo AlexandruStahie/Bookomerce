@@ -5,6 +5,11 @@ import Typography from "@material-ui/core/Typography";
 import { NavLink } from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import TextFieldLabel from "./../../components/TextFieldLabel";
+import { LoginUser } from './../../requests/userRequests'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { login } from "../../actions/user";
+import authService from './../../common/authService'
 
 const styles = theme => ({
   main: {
@@ -37,6 +42,8 @@ class Login extends React.Component {
         password: ""
       }
     };
+
+    this.goToHomeRef = React.createRef();
   }
 
   render() {
@@ -96,13 +103,21 @@ class Login extends React.Component {
         user: userCpy
       },
       () => {
-        console.log("user after update: ", user);
+        // console.log("user after update: ", user);
       }
     );
   };
 
   submitForm = () => {
-    console.log("user at submit: ", this.state.user);
+    const { email, password } = this.state.user;
+
+    LoginUser(email, password).then(data => {
+      if (data !== null && data !== undefined) {
+        this.props.login(data)
+        this.props.history.push('/')
+        authService.signIn();
+      }
+    })
   };
 }
 
@@ -110,4 +125,16 @@ Login.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Login);
+function mapStateToProps(state) {
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ login }, dispatch);
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Login));

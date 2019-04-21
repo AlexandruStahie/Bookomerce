@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,8 @@ namespace Server
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_bookomerceMyCors";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -31,8 +34,22 @@ namespace Server
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddDbContext<MyDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+                        builder.AllowCredentials();
+                        builder.AllowAnyOrigin();
+                    });
+            });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,8 +69,16 @@ namespace Server
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseCors(MyAllowSpecificOrigins);
 
-            app.UseMvc();
+            app.UseMvc(config =>
+            {
+                config.MapRoute(
+                name: "Default",
+                template: "{controller}/{action}/{id?}",
+                defaults: new { controller = "User", action = "Index" }
+            );
+            });
         }
     }
 }

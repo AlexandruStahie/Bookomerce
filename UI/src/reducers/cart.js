@@ -1,4 +1,8 @@
 const cartReducer = (state = [], action) => {
+  if (action.payload === null || action.payload === undefined) {
+    return state;
+  }
+
   switch (action.type) {
     case "ADD":
       return [...state, action.payload];

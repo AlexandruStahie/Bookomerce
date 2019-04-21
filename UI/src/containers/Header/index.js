@@ -20,6 +20,8 @@ import HomeIcon from "@material-ui/icons/Home";
 import Button from "@material-ui/core/Button";
 import { bindActionCreators } from "redux";
 import { addSearchText } from "../../actions/search";
+import { login } from "../../actions/user";
+import authService from './../../common/authService'
 
 const styles = theme => ({
   root: {
@@ -109,28 +111,12 @@ class Navigation extends React.Component {
     searchValue: ""
   };
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
-
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
-
   render() {
     const { anchorEl, mobileMoreAnchorEl, searchValue } = this.state;
-    const { classes, cart } = this.props;
+    const { classes, cart, user } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
 
     const renderMenu = (
       <Menu
@@ -138,13 +124,25 @@ class Navigation extends React.Component {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={isMenuOpen}
-        onClose={this.handleMenuClose}
+        onClose={this.loseFocus}
       >
-        <NavLink to="/login" className={classes.auth}>
-          <MenuItem onClick={this.handleMenuClose}>Login</MenuItem>
-        </NavLink>
+        {
+          authService.isAuthenticated() ? (
+            <div>
+              <NavLink to="/userPage" className={classes.auth}>
+                <MenuItem onClick={this.loseFocus}>Account</MenuItem>
+              </NavLink>
+              <NavLink to="/" className={classes.auth}>
+                <MenuItem onClick={this.logoutUser}>Logout</MenuItem>
+              </NavLink>
+            </div>
+          ) : (<NavLink to="/login" className={classes.auth}>
+            <MenuItem onClick={this.loseFocus}>Login</MenuItem>
+          </NavLink>)
+        }
+
         <NavLink to="/register" className={classes.auth}>
-          <MenuItem onClick={this.handleMenuClose}>Register</MenuItem>
+          <MenuItem onClick={this.loseFocus}>Register</MenuItem>
         </NavLink>
       </Menu>
     );
@@ -155,10 +153,10 @@ class Navigation extends React.Component {
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         transformOrigin={{ vertical: "top", horizontal: "right" }}
         open={isMobileMenuOpen}
-        onClose={this.handleMenuClose}
+        onClose={this.loseFocus}
       >
         <NavLink to="/" className={classes.auth}>
-          <MenuItem onClick={this.handleMobileMenuClose}>
+          <MenuItem onClick={this.loseFocus}>
             <IconButton color="inherit">
               <HomeIcon />
             </IconButton>
@@ -166,7 +164,7 @@ class Navigation extends React.Component {
           </MenuItem>
         </NavLink>
         <NavLink to="/cart" className={classes.auth}>
-          <MenuItem onClick={this.handleMobileMenuClose}>
+          <MenuItem onClick={this.loseFocus}>
             <IconButton color="inherit">
               <Badge badgeContent={cart.length} color="secondary">
                 <ShoppingCartIcon />
@@ -196,7 +194,7 @@ class Navigation extends React.Component {
                 noWrap
               >
                 Bookomerce
-              </Typography>
+            </Typography>
             </NavLink>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -218,7 +216,7 @@ class Navigation extends React.Component {
               onClick={this.handleSearchPress}
             >
               Search
-            </Button>
+          </Button>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <IconButton color="inherit">
@@ -261,6 +259,25 @@ class Navigation extends React.Component {
     );
   }
 
+  handleProfileMenuOpen = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleMobileMenuOpen = event => {
+    this.setState({ mobileMoreAnchorEl: event.currentTarget });
+  };
+
+  loseFocus = () => {
+    this.setState({ anchorEl: null });
+    this.setState({ mobileMoreAnchorEl: null });
+  }
+
+  logoutUser = () => {
+    this.props.login(null);
+    authService.signOut();
+    this.loseFocus();
+  }
+
   changeSearchText = event => {
     this.setState({ searchValue: event.target.value }, () => {
       console.log("search: ", this.state.searchValue);
@@ -279,12 +296,13 @@ Navigation.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    cart: state.cart
+    cart: state.cart,
+    user: state.user
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ addSearchText }, dispatch);
+  return bindActionCreators({ addSearchText, login }, dispatch);
 }
 
 export default connect(

@@ -1,0 +1,14 @@
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\bin\Debug\netcoreapp2.2\Server.deps.json
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\bin\Debug\netcoreapp2.2\Server.runtimeconfig.json
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\bin\Debug\netcoreapp2.2\Server.runtimeconfig.dev.json
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\bin\Debug\netcoreapp2.2\Server.dll
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.csprojAssemblyReference.cache
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.csproj.CoreCompileInputs.cache
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.RazorAssemblyInfo.cache
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.RazorAssemblyInfo.cs
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.AssemblyInfoInputs.cache
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.AssemblyInfo.cs
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.RazorTargetAssemblyInfo.cache
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\bin\Debug\netcoreapp2.2\Server.pdb
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.dll
+C:\Users\stahi\Desktop\Bookomerce\Server\Server\obj\Debug\netcoreapp2.2\Server.pdb
